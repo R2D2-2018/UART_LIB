@@ -1,0 +1,28 @@
+language: c++
+sudo: required
+
+compiler:
+  - gcc
+  
+python:
+  - "2.7"
+
+install:
+  - sudo pip2 install lizard -q # Cyclomatic Complexity Check Tool
+
+addons:
+  apt:
+    packages:
+      - cmake
+      - valgrind
+
+before_script:
+  - gcc --version
+  - python --version
+  - cmake --version
+  - valgrind --version
+  - lizard --version
+
+script: 
+  - source .fetch-build-environment.sh ~/build-environment
+  - source test.sh

@@ -1,0 +1,24 @@
+---
+AllowShortBlocksOnASingleLine: false
+
+AllowShortCaseLabelsOnASingleLine: false
+
+AllowShortFunctionsOnASingleLine: None
+
+AllowShortIfStatementsOnASingleLine: false
+
+AllowShortLoopsOnASingleLine: false
+
+AlwaysBreakTemplateDeclarations: true
+
+BasedOnStyle: 'LLVM'
+
+ColumnLimit: '132'
+
+IndentWidth: '4'
+
+Language: 'Cpp'
+
+NamespaceIndentation: None
+
+Standard: 'Cpp11'

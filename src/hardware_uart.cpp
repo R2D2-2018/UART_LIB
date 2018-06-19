@@ -1,6 +1,7 @@
 #include "hardware_uart.hpp"
 
-HardwareUART::HardwareUART(unsigned int baudrate, UARTController controller, bool initializeController) : baudrate(baudrate), controller(controller), USARTControllerInitialized(false) {
+HardwareUART::HardwareUART(unsigned int baudrate, UARTController controller, bool initializeController)
+    : baudrate(baudrate), controller(controller), USARTControllerInitialized(false) {
     if (initializeController) {
         begin();
     }
@@ -44,7 +45,8 @@ void HardwareUART::begin() {
         hardwareUSART = USART3;
 
         ///< Disable PIO control on PD4, PD5 and set up for peripheral B (setting a high bit).
-        ///< Section 31.7.24 - http://ww1.microchip.com/downloads/en/DeviceDoc/Atmel-11057-32-bit-Cortex-M3-Microcontroller-SAM3X-SAM3A_Datasheet.pdf
+        ///< Section 31.7.24 -
+        ///< http://ww1.microchip.com/downloads/en/DeviceDoc/Atmel-11057-32-bit-Cortex-M3-Microcontroller-SAM3X-SAM3A_Datasheet.pdf
         PIOD->PIO_PDR = PIO_PD4;
         PIOD->PIO_ABSR |= PIO_PD4;
         PIOD->PIO_PDR = PIO_PD5;
@@ -63,7 +65,8 @@ void HardwareUART::begin() {
     hardwareUSART->US_BRGR = (5241600u / baudrate);
 
     ///< No parity, normal channel mode. Use a 8 bit data field.
-    hardwareUSART->US_MR = UART_MR_PAR_NO | UART_MR_CHMODE_NORMAL | US_MR_CHRL_8_BIT; // Might check if this definition is compatable with USART as well.
+    hardwareUSART->US_MR = UART_MR_PAR_NO | UART_MR_CHMODE_NORMAL |
+                           US_MR_CHRL_8_BIT; // Might check if this definition is compatable with USART as well.
 
     ///< Disable the interrupt controller.
     hardwareUSART->US_IDR = 0xFFFFFFFF;
@@ -98,7 +101,7 @@ bool HardwareUART::send(const uint8_t b) {
     return true;
 }
 
-bool HardwareUART::send(const uint8_t* str) {
+bool HardwareUART::send(const uint8_t *str) {
     if (!USARTControllerInitialized) {
         return false;
     }
@@ -110,7 +113,7 @@ bool HardwareUART::send(const uint8_t* str) {
     return true;
 }
 
-bool HardwareUART::send(const char* str) {
+bool HardwareUART::send(const char *str) {
     if (!USARTControllerInitialized) {
         return false;
     }
@@ -122,7 +125,7 @@ bool HardwareUART::send(const char* str) {
     return true;
 }
 
-bool HardwareUART::send(const uint8_t* data, size_t length) {
+bool HardwareUART::send(const uint8_t *data, size_t length) {
     if (!USARTControllerInitialized) {
         return false;
     }
@@ -130,7 +133,7 @@ bool HardwareUART::send(const uint8_t* data, size_t length) {
     for (unsigned int i = 0; i < length; i++) {
         sendByte(data[i]);
     }
-    
+
     return true;
 }
 
@@ -139,7 +142,7 @@ uint8_t HardwareUART::receive() {
         return 0;
     }
 
-    return rxBuffer.pop();   
+    return rxBuffer.pop();
 }
 
 void HardwareUART::operator<<(const char *str) {
@@ -160,7 +163,8 @@ bool HardwareUART::isInitialized() {
 
 void HardwareUART::sendByte(const uint8_t &b) {
     ///< Wait before we can send any more data
-    while (!txReady());
+    while (!txReady())
+        ;
 
     ///< Send it!
     hardwareUSART->US_THR = b;

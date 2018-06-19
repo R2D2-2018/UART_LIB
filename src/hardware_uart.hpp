@@ -16,7 +16,7 @@
  * @brief Establishes an serial/UART connection using on of the three dedicated serial controllers located on the Arduino Due.
  *
  */
-class HardwareUART : UARTConnection {
+class HardwareUART : public UARTConnection {
   public:
     /**
      * @brief Construct a new HardwareUART object.

@@ -29,4 +29,6 @@ set (sources
     src/libc-stub.cpp
     src/main.cpp
     src/uart_connection.cpp
+    src/hardware_uart.cpp
+    src/mock_uart.cpp
 )

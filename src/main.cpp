@@ -1,6 +1,6 @@
-#include "wrap-hwlib.hpp"
 #include "hardware_uart.hpp"
 #include "mock_uart.hpp"
+#include "wrap-hwlib.hpp"
 
 /**
  * @brief Example for using the UART library.
@@ -13,9 +13,10 @@ int main() {
     ///< Wait a litle bit of proper initialization.
     hwlib::wait_ms(500);
 
-    ///< Initialize UART controller 3. Use a 115200 baudrate to send and receive (used by the uArm Swift Pro to send Gcode commands).
+    ///< Initialize UART controller 3. Use a 115200 baudrate to send and receive (used by the uArm Swift Pro to send Gcode
+    ///< commands).
     HardwareUART conn(115200, UARTController::THREE);
-    
+
     ///< For the mock implementation, use MockUART conn(115200, UARTController::ONE);
 
     long startMsReceive = hwlib::now_us() / 1000;

@@ -77,7 +77,7 @@ public:
    * @return true Byte send.
    * @return false Byte has not been send, USART controller not initialized.
    */
-  bool send(const char c);
+  bool send(const uint8_t c);
 
   /**
    * @brief Send a string.
@@ -86,7 +86,19 @@ public:
    * @return true String send.
    * @return false String has not been send, USART controller not initialized.
    */
-  bool send(const char *str);
+  bool send(const uint8_t *str);
+
+  /**
+   * @brief Send a string.
+   * 
+   * As we cannot static cast a const char* pointer to a const char* pointer, we overload the send function.
+   * Using reinterpreter cast would be a unfavourable solution, as the side effects are unkwown.
+   * 
+   * @param data String.
+   * @return true String has been send.
+   * @return false String has not been send, USART controller not initialized.
+   */
+  bool send(const char *data);
 
   /**
    * @brief Send a array of bytes with a specified length.
@@ -96,16 +108,16 @@ public:
    * @return true Array of bytes send.
    * @return false Array of bytes has not been send, USART controller not initialized.
    */
-  bool send(const char* data, size_t length);
+  bool send(const uint8_t* data, size_t length);
 
   /**
    * @brief Receive a single byte.
    * 
    * By popping the first element of the receive buffer, we return a received byte in a FIFO manner.
    * 
-   * @return char Received byte.
+   * @return uint8_t Received byte.
    */
-  char receive();
+  uint8_t receive();
 
   /**
    * @brief Checks if the internal USART controller has been initialized.
@@ -120,10 +132,13 @@ public:
    * 
    * @param c Byte.
    */
-  void operator<<(const char c);
+  void operator<<(const uint8_t c);
 
   /**
    * @brief Send a string.
+   * 
+   * As we want to easily send strings using the shifting operator, we need to declare a operator<<(const char* ).
+   * The use of a operator<<(const uint8_t* ) would be favourable, but unfortunately not possible.
    * 
    * @param str String (must be null terminated).
    */
@@ -134,7 +149,7 @@ public:
    * 
    * @param c Byte.
    */
-  void operator>>(char &c);
+  void operator>>(uint8_t &c);
 
   /**
    * @brief Destroy the UARTConnection object.
@@ -167,13 +182,13 @@ private:
    * @brief Holds the initialization status of the USART controller.
    * 
    */
-  bool USARTControllerInitialized = false;
+  bool USARTControllerInitialized;
 
   /**
    * @brief UART receive buffer.
    * 
    */
-  Queue<char, 250> rxBuffer;
+  Queue<uint8_t, 250> rxBuffer;
 
   /**
    * @brief Checks if the USART controller reports that the transmitter is ready to send.
@@ -188,14 +203,14 @@ private:
    *
    * @param char Byte to send.
    */
-  void sendByte(const char &b);
+  void sendByte(const uint8_t &b);
 
   /**
    * @brief Receive a single byte by reading the US_RHR register.
    * 
    * @return char 
    */
-  inline char receiveByte();
+  inline uint8_t receiveByte();
 };
 
 #endif

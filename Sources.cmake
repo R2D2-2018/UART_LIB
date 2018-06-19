@@ -28,4 +28,5 @@ set (sources
     src/wrap-hwlib.cpp
     src/libc-stub.cpp
     src/main.cpp
+    src/uart_connection.cpp
 )

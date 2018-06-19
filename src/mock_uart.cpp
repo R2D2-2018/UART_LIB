@@ -1,6 +1,7 @@
 #include "mock_uart.hpp"
 
-MockUART::MockUART(unsigned int baudrate, UARTController controller, bool initializeController) : baudrate(baudrate), controller(controller), USARTControllerInitialized(false) {
+MockUART::MockUART(unsigned int baudrate, UARTController controller, bool initializeController)
+    : baudrate(baudrate), controller(controller), USARTControllerInitialized(false) {
     if (initializeController) {
         begin();
     }
@@ -49,7 +50,7 @@ bool MockUART::send(const uint8_t b) {
     return true;
 }
 
-bool MockUART::send(const uint8_t* str) {
+bool MockUART::send(const uint8_t *str) {
     if (!USARTControllerInitialized) {
         return false;
     }
@@ -61,7 +62,7 @@ bool MockUART::send(const uint8_t* str) {
     return true;
 }
 
-bool MockUART::send(const char* str) {
+bool MockUART::send(const char *str) {
     if (!USARTControllerInitialized) {
         return false;
     }
@@ -73,7 +74,7 @@ bool MockUART::send(const char* str) {
     return true;
 }
 
-bool MockUART::send(const uint8_t* data, size_t length) {
+bool MockUART::send(const uint8_t *data, size_t length) {
     if (!USARTControllerInitialized) {
         return false;
     }
@@ -81,7 +82,7 @@ bool MockUART::send(const uint8_t* data, size_t length) {
     for (unsigned int i = 0; i < length; i++) {
         sendByte(data[i]);
     }
-    
+
     return true;
 }
 
@@ -90,7 +91,7 @@ uint8_t MockUART::receive() {
         return 0;
     }
 
-    return rxBuffer.pop();   
+    return rxBuffer.pop();
 }
 
 void MockUART::operator<<(const char *str) {
@@ -111,10 +112,11 @@ bool MockUART::isInitialized() {
 
 void MockUART::sendByte(const uint8_t &b) {
     ///< Wait before we can send any more data
-    while (!txReady());
+    while (!txReady())
+        ;
 
     ///< Send it!
-    //hardwareUSART->US_THR = b;
+    // hardwareUSART->US_THR = b;
 
     ///< Normally, we would send right now. Since it's a mock implementation, we don't do that.
 }

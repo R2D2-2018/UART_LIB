@@ -13,7 +13,7 @@ int main() {
     hwlib::cout << "Initialized transceiver" << hwlib::endl;
 
 
-    /// Initialize UART controller 3. Use a 115200 baudrate to send and receive (used by the uArm Swift Pro to send Gcode commands).
+    ///< Initialize UART controller 3. Use a 115200 baudrate to send and receive (used by the uArm Swift Pro to send Gcode commands).
     UARTConnection conn(115200, UARTController::THREE);
     hwlib::wait_ms(500);
 

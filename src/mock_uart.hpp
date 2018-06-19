@@ -1,9 +1,22 @@
+/**
+ * @brief Mock implementation of UART communication.
+ * 
+ * @file mock_uart.hpp
+ * @author Wiebe van Breukelen
+ * @date 2018-06-19
+ */
+
 #ifndef MOCK_UART_HPP
 #define MOCK_UART_HPP
 
 #include "wrap-hwlib.hpp"
 #include "uart_connection.hpp"
 
+/**
+ * @brief In the mock implementation of UART communication, we only provide the user a testable interface,
+ * as we don't have access to hardware registers.
+ * 
+ */
 class MockUART : public UARTConnection {
 public:
 /**
@@ -164,7 +177,7 @@ private:
 
   /**
    * @brief Checks if the USART controller reports that the transmitter is ready to send.
-   * 
+   * As it's a mock implementation, we default to true.
    * @return true Ready to send.
    * @return false Not ready to send.
    */

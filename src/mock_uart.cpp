@@ -17,56 +17,8 @@ void MockUART::begin() {
         return;
     }
 
-    ///< Setup the correct USART controller.
-    /**if (controller == UARTController::ONE) {
-        hardwareUSART = USART0;
-
-        ///< Disable PIO control on PA10, PA11 and set up for peripheral A.
-        PIOA->PIO_PDR = PIO_PA10;
-        PIOA->PIO_ABSR &= ~PIO_PA10;
-        PIOA->PIO_PDR = PIO_PA11;
-        PIOA->PIO_ABSR &= ~PIO_PA11;
-
-        ///< Enable the clock to USART0.
-        PMC->PMC_PCER0 = (0x01 << ID_USART0);
-    } else if (controller == UARTController::TWO) {
-        hardwareUSART = USART1;
-
-        ///< Disable PIO control on PA12, PA13 and set up for peripheral A.
-        PIOA->PIO_PDR = PIO_PA12;
-        PIOA->PIO_ABSR &= ~PIO_PA12;
-        PIOA->PIO_PDR = PIO_PA13;
-        PIOA->PIO_ABSR &= ~PIO_PA13;
-
-        ///< Enable the clock to USART1.
-        PMC->PMC_PCER0 = (0x01 << ID_USART1);
-    } else {
-        hardwareUSART = USART3;
-
-        ///< Disable PIO control on PD4, PD5 and set up for peripheral B (setting a high bit).
-        ///< Section 31.7.24 - http://ww1.microchip.com/downloads/en/DeviceDoc/Atmel-11057-32-bit-Cortex-M3-Microcontroller-SAM3X-SAM3A_Datasheet.pdf
-        PIOD->PIO_PDR = PIO_PD4;
-        PIOD->PIO_ABSR |= PIO_PD4;
-        PIOD->PIO_PDR = PIO_PD5;
-        PIOD->PIO_ABSR |= PIO_PD5;
-
-        ///< Enable the clock to USART3.
-        PMC->PMC_PCER0 = (0x01 << ID_USART3);
-    }
-
-    ///< Disable the UART connection to make changes.
-    disable();
-
-    ///< Set the baudrate to 115200. see page 799
-    ///< Calculation: 5241600 / desired baudrate
-    ///< 115200: 45
-    hardwareUSART->US_BRGR = (5241600u / baudrate);
-
-    ///< No parity, normal channel mode. Use a 8 bit data field.
-    hardwareUSART->US_MR = UART_MR_PAR_NO | UART_MR_CHMODE_NORMAL | US_MR_CHRL_8_BIT; // Might check if this definition is compatable with USART as well.
-
-    ///< Disable the interrupt controller.
-    hardwareUSART->US_IDR = 0xFFFFFFFF;**/
+    ///< Normally, we would setup the correct USART controller.
+    ///< In the mock implementation, we do nothing.
 
     ///< Enable the UART controller
     enable();
@@ -80,10 +32,9 @@ unsigned int MockUART::available() {
         return 0;
     }
 
-    ///< We use the USART Channel status register to check if there is data available.
-    //if ((hardwareUSART->US_CSR & 1) != 0) {
+    ///< In the hardware implementation we use the USART Channel status register to check if there is data available.
+    ///< In the mock implementation, we just put in that we received from receiveByte() (will is always 0x80).
     rxBuffer.push(receiveByte());
-    //}
 
     return rxBuffer.count();
 }
@@ -173,25 +124,18 @@ inline uint8_t MockUART::receiveByte() {
     ///< Instead, we always send a fixed byte.
 
     return 0xAA;
-
-    //return hardwareUSART->US_RHR;
 }
 
 inline bool MockUART::txReady() {
     ///< Normally, we would wait for the tx line to be ready. Since it's a mock implementation, we don't do that.
-    ///return (hardwareUSART->US_CSR & 2);
 
     return true;
 }
 
 inline void MockUART::enable() {
-    ///< Normally, we would send right now. Since it's a mock implementation, we don't do that.
-    ///< Enable the transmitter and receiver
-    ///hardwareUSART->US_CR = UART_CR_RXEN | UART_CR_TXEN;
+    ///< Normally, we would enable the USART controller right now. Since it's a mock implementation, we don't do that.
 }
 
 inline void MockUART::disable() {
-    ///< Normally, we would send right now. Since it's a mock implementation, we don't do that.
-    ///< Set the control register to reset and disable the receiver and transmitter.
-    ///hardwareUSART->US_CR = UART_CR_RSTRX | UART_CR_RSTTX | UART_CR_RXDIS | UART_CR_TXDIS;
+    ///< Normally, we would disable the USART controller right now. Since it's a mock implementation, we don't do that.
 }

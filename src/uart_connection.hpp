@@ -8,8 +8,8 @@
 #ifndef UART_COMM_HPP
 #define UART_COMM_HPP
 
-#include "wrap-hwlib.hpp"
 #include "queue.hpp"
+#include "wrap-hwlib.hpp"
 
 /**
  * @brief Used to select the UART controllers available on the Arduino Due.

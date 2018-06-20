@@ -116,32 +116,32 @@ class HardwareUART : public UARTConnection {
      * @return false Internal USART has not been initialized. See the begin() method.
      */
     bool isInitialized() override;
-    
+
     /**
      * @brief Write a character using UART.
-     * 
+     *
      * Used for interface inheriting between hwlib::istream and hwlib::ostream.
-     * 
+     *
      * @param c Character to send.
      */
     void putc(char c) override;
 
     /**
      * @brief Check if a character is available to read.
-     * 
+     *
      * Used for interface inheriting between hwlib::istream and hwlib::ostream.
-     * 
-     * @return true 
-     * @return false 
+     *
+     * @return true
+     * @return false
      */
     bool char_available() override;
 
     /**
      * @brief Read a character using UART.
-     * 
+     *
      * Used for interface inheriting between hwlib::istream and hwlib::ostream.
-     * 
-     * @return char 
+     *
+     * @return char
      */
     char getc() override;
 

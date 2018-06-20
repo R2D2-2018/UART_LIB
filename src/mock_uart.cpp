@@ -112,8 +112,8 @@ bool MockUART::isInitialized() {
 
 void MockUART::sendByte(const uint8_t &b) {
     ///< Wait before we can send any more data
-    while (!txReady())
-        ;
+    while (!txReady()) {
+    }
 
     ///< Normally, we would send right now. Since it's a mock implementation, we don't do that.
 }

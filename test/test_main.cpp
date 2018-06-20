@@ -2,10 +2,6 @@
 #include "catch.hpp"
 #include "../src/mock_uart.hpp"
 
-TEST_CASE("Example Test Case") {
-    REQUIRE(10 == 10);
-}
-
 TEST_CASE("Construct MockUART instance") {
     MockUART uart(115200, UARTController::THREE, false);
 

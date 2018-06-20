@@ -11,7 +11,6 @@ include_directories (${catch}/single_include)
 # Source Files:
 
 set (sources
-    src/wrap-hwlib.cpp
     src/uart_connection.cpp
     src/mock_uart.cpp
 )

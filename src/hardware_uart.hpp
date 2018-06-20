@@ -12,6 +12,8 @@
 #include "uart_connection.hpp"
 #include "wrap-hwlib.hpp"
 
+namespace UARTLib {
+
 /**
  * @brief Establishes an serial/UART connection using on of the three dedicated serial controllers located on the Arduino Due.
  *
@@ -206,5 +208,7 @@ class HardwareUART : public UARTConnection {
      */
     inline uint8_t receiveByte() override;
 };
+
+}
 
 #endif

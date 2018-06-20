@@ -1,5 +1,7 @@
 #include "mock_uart.hpp"
 
+namespace UARTLib {
+
 MockUART::MockUART(unsigned int baudrate, UARTController controller, bool initializeController)
     : baudrate(baudrate), controller(controller), USARTControllerInitialized(false) {
     if (initializeController) {
@@ -137,4 +139,6 @@ inline void MockUART::enable() {
 
 inline void MockUART::disable() {
     ///< Normally, we would disable the USART controller right now. Since it's a mock implementation, we don't do that.
+}
+
 }

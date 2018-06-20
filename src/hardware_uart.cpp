@@ -145,20 +145,24 @@ uint8_t HardwareUART::receive() {
     return rxBuffer.pop();
 }
 
-void HardwareUART::operator<<(const char *str) {
-    send(str);
-}
-
-void HardwareUART::operator<<(const uint8_t c) {
-    send(c);
-}
-
-void HardwareUART::operator>>(uint8_t &c) {
-    c = receive();
-}
-
 bool HardwareUART::isInitialized() {
     return USARTControllerInitialized;
+}
+
+void HardwareUART::putc(char c) {
+    sendByte(c);
+}
+
+char HardwareUART::getc() {
+    if (available() > 0) {
+        return receive();
+    }
+
+    return 0;
+}
+
+bool HardwareUART::char_available() {
+    return (available() > 0);
 }
 
 void HardwareUART::sendByte(const uint8_t &b) {

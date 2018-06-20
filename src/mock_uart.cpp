@@ -94,16 +94,16 @@ uint8_t MockUART::receive() {
     return rxBuffer.pop();
 }
 
-void MockUART::operator<<(const char *str) {
-    send(str);
+void MockUART::putc(char c) {
+    sendByte(c);
 }
 
-void MockUART::operator<<(const uint8_t c) {
-    send(c);
+char MockUART::getc() {
+    return receive();
 }
 
-void MockUART::operator>>(uint8_t &c) {
-    c = receive();
+bool MockUART::char_available() {
+    return (available() > 0);
 }
 
 bool MockUART::isInitialized() {
@@ -114,9 +114,6 @@ void MockUART::sendByte(const uint8_t &b) {
     ///< Wait before we can send any more data
     while (!txReady())
         ;
-
-    ///< Send it!
-    // hardwareUSART->US_THR = b;
 
     ///< Normally, we would send right now. Since it's a mock implementation, we don't do that.
 }

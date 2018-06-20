@@ -37,7 +37,7 @@ class HardwareUART : public UARTConnection {
      * on the Arduino Due. By default, this method is called at object construction, but this can be disabled.
      *
      */
-    void begin();
+    void begin() override;
 
     /**
      * @brief Check how many bytes are available to read.
@@ -46,19 +46,19 @@ class HardwareUART : public UARTConnection {
      *
      * @return unsigned int Amount of bytes available to read.
      */
-    unsigned int available();
+    unsigned int available() override;
 
     /**
      * @brief Enables the internal USART controller.
      *
      */
-    inline void enable();
+    inline void enable() override;
 
     /**
      * @brief Disables the internal USART controller.
      *
      */
-    inline void disable();
+    inline void disable() override;
 
     /**
      * @brief Send a single byte.
@@ -67,7 +67,7 @@ class HardwareUART : public UARTConnection {
      * @return true Byte send.
      * @return false Byte has not been send, USART controller not initialized.
      */
-    bool send(const uint8_t c);
+    bool send(const uint8_t c) override;
 
     /**
      * @brief Send a string.
@@ -76,7 +76,7 @@ class HardwareUART : public UARTConnection {
      * @return true String send.
      * @return false String has not been send, USART controller not initialized.
      */
-    bool send(const uint8_t *str);
+    bool send(const uint8_t *str) override;
 
     /**
      * @brief Send a string.
@@ -88,7 +88,7 @@ class HardwareUART : public UARTConnection {
      * @return true String has been send.
      * @return false String has not been send, USART controller not initialized.
      */
-    bool send(const char *data);
+    bool send(const char *data) override;
 
     /**
      * @brief Send a array of bytes with a specified length.
@@ -98,7 +98,7 @@ class HardwareUART : public UARTConnection {
      * @return true Array of bytes send.
      * @return false Array of bytes has not been send, USART controller not initialized.
      */
-    bool send(const uint8_t *data, size_t length);
+    bool send(const uint8_t *data, size_t length) override;
 
     /**
      * @brief Receive a single byte.
@@ -107,7 +107,7 @@ class HardwareUART : public UARTConnection {
      *
      * @return uint8_t Received byte.
      */
-    uint8_t receive();
+    uint8_t receive() override;
 
     /**
      * @brief Checks if the internal USART controller has been initialized.
@@ -115,31 +115,35 @@ class HardwareUART : public UARTConnection {
      * @return true Internal USART controller is initialized.
      * @return false Internal USART has not been initialized. See the begin() method.
      */
-    bool isInitialized();
+    bool isInitialized() override;
+    
+    /**
+     * @brief Write a character using UART.
+     * 
+     * Used for interface inheriting between hwlib::istream and hwlib::ostream.
+     * 
+     * @param c Character to send.
+     */
+    void putc(char c) override;
 
     /**
-     * @brief Send a single byte.
-     *
-     * @param c Byte.
+     * @brief Check if a character is available to read.
+     * 
+     * Used for interface inheriting between hwlib::istream and hwlib::ostream.
+     * 
+     * @return true 
+     * @return false 
      */
-    void operator<<(const uint8_t c);
+    bool char_available() override;
 
     /**
-     * @brief Send a string.
-     *
-     * As we want to easily send strings using the shifting operator, we need to declare a operator<<(const char* ).
-     * The use of a operator<<(const uint8_t* ) would be favourable, but unfortunately not possible.
-     *
-     * @param str String (must be null terminated).
+     * @brief Read a character using UART.
+     * 
+     * Used for interface inheriting between hwlib::istream and hwlib::ostream.
+     * 
+     * @return char 
      */
-    void operator<<(const char *str);
-
-    /**
-     * @brief Receive a byte.
-     *
-     * @param c Byte.
-     */
-    void operator>>(uint8_t &c);
+    char getc() override;
 
     /**
      * @brief Destroy the HardwareUART object.
@@ -186,21 +190,21 @@ class HardwareUART : public UARTConnection {
      * @return true Ready to send.
      * @return false Not ready to send.
      */
-    inline bool txReady();
+    inline bool txReady() override;
 
     /**
      * @brief Send a byte of the serial connection.
      *
      * @param char Byte to send.
      */
-    void sendByte(const uint8_t &b);
+    void sendByte(const uint8_t &b) override;
 
     /**
      * @brief Receive a single byte by reading the US_RHR register.
      *
      * @return char
      */
-    inline uint8_t receiveByte();
+    inline uint8_t receiveByte() override;
 };
 
 #endif

@@ -118,28 +118,32 @@ class MockUART : public UARTConnection {
     bool isInitialized();
 
     /**
-     * @brief Send a single byte.
-     *
-     * @param c Byte.
+     * @brief Write a character using UART.
+     * 
+     * Used for interface inheriting between hwlib::istream and hwlib::ostream.
+     * 
+     * @param c Character to send.
      */
-    void operator<<(const uint8_t c);
+    void putc(char c) override;
 
     /**
-     * @brief Send a string.
-     *
-     * As we want to easily send strings using the shifting operator, we need to declare a operator<<(const char* ).
-     * The use of a operator<<(const uint8_t* ) would be favourable, but unfortunately not possible.
-     *
-     * @param str String (must be null terminated).
+     * @brief Check if a character is available to read.
+     * 
+     * Used for interface inheriting between hwlib::istream and hwlib::ostream.
+     * 
+     * @return true 
+     * @return false 
      */
-    void operator<<(const char *str);
+    bool char_available() override;
 
     /**
-     * @brief Receive a byte.
-     *
-     * @param c Byte.
+     * @brief Read a character using UART.
+     * 
+     * Used for interface inheriting between hwlib::istream and hwlib::ostream.
+     * 
+     * @return char 
      */
-    void operator>>(uint8_t &c);
+    char getc() override;
 
     /**
      * @brief Destroy the MockUART object.

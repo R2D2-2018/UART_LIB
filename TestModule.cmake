@@ -1,9 +1,24 @@
 include (CTest)
 
+include (${build_environment}/flags.cmake)
+
+include_directories (src/)
+
+add_definitions (-DBMPTK_TARGET_test
+                 -DBMPTK_TARGET=test
+                 -DBMPTK_BAUDRATE=19200)
+
+set (sources ${sources}
+    ${unit_test_main}
+    src/wrap-hwlib.cpp
+    src/libc-stub.cpp
+)
+
 set (build_test build_test)
 set (unit_test unit_test)
 set (memcheck memcheck)
 set (complexity_test complexity_test)
+set (clangformat_test clangformat_test)
 
 if (NOT DEFINED cyclomatic_complexity_warning)
 SET(cyclomatic_complexity_warning 10)
@@ -20,7 +35,7 @@ add_test (
 endif (build_test_enabled)
 
 if (unit_test_enabled)
-add_executable (${unit_test} ${unit_test_main})
+add_executable (${unit_test} ${unit_test_main} ${sources})
 
 add_test (
 	NAME ${unit_test}
@@ -53,6 +68,13 @@ set_tests_properties (
 )
 endif (UNIX AND memcheck_enabled)
 endif (test_build)
+
+if (clang_format_test_enabled)
+add_test (
+	NAME ${clangformat_test}
+	COMMAND python2 ${PROJECT_SOURCE_DIR}/.clang-format-compare.py ${PROJECT_SOURCE_DIR}/src ${PROJECT_SOURCE_DIR}/test
+)
+endif (clang_format_test_enabled)
 
 # The target that is compiled for:
 include (${toolchain}/targets/test/test.cmake)

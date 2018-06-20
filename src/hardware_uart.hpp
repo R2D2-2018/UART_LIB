@@ -1,35 +1,37 @@
 /**
  * @file
- * @brief     Superclass for any UART connection, hardware or mock based.
+ * @brief     UART Communication driver for the Arduino Due.
  * @author    Wiebe van Breukelen
  * @license   See LICENSE
  */
 
-#ifndef UART_COMM_HPP
-#define UART_COMM_HPP
+#ifndef HARDWARE_UART_HPP
+#define HARDWARE_UART_HPP
 
 #include "queue.hpp"
+#include "uart_connection.hpp"
 #include "wrap-hwlib.hpp"
 
 namespace UARTLib {
 
 /**
- * @brief Used to select the UART controllers available on the Arduino Due.
- *
- * Pins:
- * One   - 18 and 19
- * Two   - 16 and 17
- * Three - 14 and 15
- */
-enum class UARTController { ONE, TWO, THREE };
-
-/**
- * @brief Superclass for any UART connection, hardware or mock based.
- * Using polymorphism, we can use the same interface for both implementations.
+ * @brief Establishes an serial/UART connection using on of the three dedicated serial controllers located on the Arduino Due.
  *
  */
-class UARTConnection : public hwlib::ostream, public hwlib::istream {
+class HardwareUART : public UARTConnection {
   public:
+    /**
+     * @brief Construct a new HardwareUART object.
+     *
+     * @param baudrate Transmit and receive baudrate.
+     * @param controller Controller used to transmit and receive.
+     *
+     * By default, controller one is selected (pins 18 and 19 on the Arduino Due).
+     *
+     * @param initializeController Initialize the USART controller directly within the object constructor.
+     */
+    HardwareUART(unsigned int baudrate, UARTController controller = UARTController::ONE, bool initializeController = true);
+
     /**
      * @brief Begin a UART connection.
      *
@@ -37,7 +39,7 @@ class UARTConnection : public hwlib::ostream, public hwlib::istream {
      * on the Arduino Due. By default, this method is called at object construction, but this can be disabled.
      *
      */
-    virtual void begin() = 0;
+    void begin() override;
 
     /**
      * @brief Check how many bytes are available to read.
@@ -46,19 +48,19 @@ class UARTConnection : public hwlib::ostream, public hwlib::istream {
      *
      * @return unsigned int Amount of bytes available to read.
      */
-    virtual unsigned int available() = 0;
+    unsigned int available() override;
 
     /**
      * @brief Enables the internal USART controller.
      *
      */
-    virtual inline void enable() = 0;
+    inline void enable() override;
 
     /**
      * @brief Disables the internal USART controller.
      *
      */
-    virtual inline void disable() = 0;
+    inline void disable() override;
 
     /**
      * @brief Send a single byte.
@@ -67,7 +69,7 @@ class UARTConnection : public hwlib::ostream, public hwlib::istream {
      * @return true Byte send.
      * @return false Byte has not been send, USART controller not initialized.
      */
-    virtual bool send(const uint8_t c) = 0;
+    bool send(const uint8_t c) override;
 
     /**
      * @brief Send a string.
@@ -76,7 +78,7 @@ class UARTConnection : public hwlib::ostream, public hwlib::istream {
      * @return true String send.
      * @return false String has not been send, USART controller not initialized.
      */
-    virtual bool send(const uint8_t *str) = 0;
+    bool send(const uint8_t *str) override;
 
     /**
      * @brief Send a string.
@@ -88,7 +90,7 @@ class UARTConnection : public hwlib::ostream, public hwlib::istream {
      * @return true String has been send.
      * @return false String has not been send, USART controller not initialized.
      */
-    virtual bool send(const char *data) = 0;
+    bool send(const char *data) override;
 
     /**
      * @brief Send a array of bytes with a specified length.
@@ -98,7 +100,7 @@ class UARTConnection : public hwlib::ostream, public hwlib::istream {
      * @return true Array of bytes send.
      * @return false Array of bytes has not been send, USART controller not initialized.
      */
-    virtual bool send(const uint8_t *data, size_t length) = 0;
+    bool send(const uint8_t *data, size_t length) override;
 
     /**
      * @brief Receive a single byte.
@@ -107,7 +109,7 @@ class UARTConnection : public hwlib::ostream, public hwlib::istream {
      *
      * @return uint8_t Received byte.
      */
-    virtual uint8_t receive() = 0;
+    uint8_t receive() override;
 
     /**
      * @brief Checks if the internal USART controller has been initialized.
@@ -115,36 +117,96 @@ class UARTConnection : public hwlib::ostream, public hwlib::istream {
      * @return true Internal USART controller is initialized.
      * @return false Internal USART has not been initialized. See the begin() method.
      */
-    virtual bool isInitialized() = 0;
+    bool isInitialized() override;
 
-    virtual void putc(char c) = 0;
+    /**
+     * @brief Write a character using UART.
+     *
+     * Used for interface inheriting between hwlib::istream and hwlib::ostream.
+     *
+     * @param c Character to send.
+     */
+    void putc(char c) override;
 
-    virtual bool char_available() = 0;
+    /**
+     * @brief Check if a character is available to read.
+     *
+     * Used for interface inheriting between hwlib::istream and hwlib::ostream.
+     *
+     * @return true
+     * @return false
+     */
+    bool char_available() override;
 
-    virtual char getc() = 0;
+    /**
+     * @brief Read a character using UART.
+     *
+     * Used for interface inheriting between hwlib::istream and hwlib::ostream.
+     *
+     * @return char
+     */
+    char getc() override;
+
+    /**
+     * @brief Destroy the HardwareUART object.
+     *
+     * Disables the UART controller to save resources.
+     *
+     */
+    ~HardwareUART();
 
   private:
+    /**
+     * @brief Pointer the access the internal USART controllers.
+     *
+     */
+    Usart *hardwareUSART = nullptr;
+
+    /**
+     * @brief Data baudrate used for sending and receiving.
+     *
+     */
+    unsigned int baudrate;
+
+    /**
+     * @brief Enumerable type used to select on of the three USART controllers located on the Arduino Due.
+     *
+     */
+    UARTController controller;
+
+    /**
+     * @brief Holds the initialization status of the USART controller.
+     *
+     */
+    bool USARTControllerInitialized;
+
+    /**
+     * @brief UART receive buffer.
+     *
+     */
+    Queue<uint8_t, 250> rxBuffer;
+
     /**
      * @brief Checks if the USART controller reports that the transmitter is ready to send.
      *
      * @return true Ready to send.
      * @return false Not ready to send.
      */
-    virtual inline bool txReady() = 0;
+    inline bool txReady() override;
 
     /**
      * @brief Send a byte of the serial connection.
      *
      * @param char Byte to send.
      */
-    virtual void sendByte(const uint8_t &b) = 0;
+    void sendByte(const uint8_t &b) override;
 
     /**
      * @brief Receive a single byte by reading the US_RHR register.
      *
      * @return char
      */
-    virtual inline uint8_t receiveByte() = 0;
+    inline uint8_t receiveByte() override;
 };
 
 }

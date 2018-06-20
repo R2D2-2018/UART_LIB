@@ -1,5 +1,6 @@
-#include "hardware_uart.hpp"
-#include "mock_uart.hpp"
+//#include "hardware_uart.hpp"
+//#include "mock_uart.hpp"
+#include "uart_lib.hpp"
 #include "wrap-hwlib.hpp"
 
 class ExampleUARTUser {

@@ -11,6 +11,8 @@
 #include "queue.hpp"
 #include "wrap-hwlib.hpp"
 
+namespace UARTLib {
+
 /**
  * @brief Used to select the UART controllers available on the Arduino Due.
  *
@@ -144,5 +146,7 @@ class UARTConnection : public hwlib::ostream, public hwlib::istream {
      */
     virtual inline uint8_t receiveByte() = 0;
 };
+
+}
 
 #endif

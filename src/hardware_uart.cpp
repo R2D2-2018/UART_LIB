@@ -1,5 +1,7 @@
 #include "hardware_uart.hpp"
 
+namespace UARTLib {
+
 HardwareUART::HardwareUART(unsigned int baudrate, UARTController controller, bool initializeController)
     : baudrate(baudrate), controller(controller), USARTControllerInitialized(false) {
     if (initializeController) {
@@ -191,4 +193,6 @@ inline void HardwareUART::enable() {
 inline void HardwareUART::disable() {
     ///< Set the control register to reset and disable the receiver and transmitter.
     hardwareUSART->US_CR = UART_CR_RSTRX | UART_CR_RSTTX | UART_CR_RXDIS | UART_CR_TXDIS;
+}
+
 }

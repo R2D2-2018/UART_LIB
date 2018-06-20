@@ -4,10 +4,10 @@
 
 class ExampleUARTUser {
   private:
-    UARTConnection &conn;
+    UARTLib::UARTConnection &conn;
 
   public:
-    ExampleUARTUser(UARTConnection &conn) : conn(conn){};
+    ExampleUARTUser(UARTLib::UARTConnection &conn) : conn(conn){};
 
     unsigned int bytesAvailable() {
         return conn.available();
@@ -35,9 +35,9 @@ int main() {
     hwlib::wait_ms(500);
 
     ///< Initialize a hardware UART connection, with a baudrate of 115200 and using RX1 and TX1 on the Arduino Due.
-    HardwareUART connHw(115200, UARTController::ONE);
+    UARTLib::HardwareUART connHw(115200, UARTLib::UARTController::ONE);
     ///< Initiailze a mock/fake UART connection. Use this one in your tests.
-    MockUART connMock(115200, UARTController::ONE);
+    UARTLib::MockUART connMock(115200, UARTLib::UARTController::ONE);
 
     ///< Create two dummy objects.
     ExampleUARTUser uartHwUser(connHw);

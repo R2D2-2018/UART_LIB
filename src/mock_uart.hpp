@@ -11,6 +11,8 @@
 
 #include "uart_connection.hpp"
 
+namespace UARTLib {
+
 /**
  * @brief In the mock implementation of UART communication, we only provide the user a testable interface,
  * as we don't have access to hardware registers.
@@ -200,5 +202,7 @@ class MockUART : public UARTConnection {
      */
     inline uint8_t receiveByte();
 };
+
+}
 
 #endif

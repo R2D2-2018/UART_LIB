@@ -8,6 +8,7 @@
 #ifndef UART_COMM_HPP
 #define UART_COMM_HPP
 
+#include "wrap-hwlib.hpp"
 #include "queue.hpp"
 
 /**
@@ -25,7 +26,7 @@ enum class UARTController { ONE, TWO, THREE };
  * Using polymorphism, we can use the same interface for both implementations.
  *
  */
-class UARTConnection {
+class UARTConnection : public hwlib::ostream, public hwlib::istream {
   public:
     /**
      * @brief Begin a UART connection.
@@ -114,29 +115,11 @@ class UARTConnection {
      */
     virtual bool isInitialized() = 0;
 
-    /**
-     * @brief Send a single byte.
-     *
-     * @param c Byte.
-     */
-    virtual void operator<<(const uint8_t c) = 0;
+    virtual void putc(char c) = 0;
 
-    /**
-     * @brief Send a string.
-     *
-     * As we want to easily send strings using the shifting operator, we need to declare a operator<<(const char* ).
-     * The use of a operator<<(const uint8_t* ) would be favourable, but unfortunately not possible.
-     *
-     * @param str String (must be null terminated).
-     */
-    virtual void operator<<(const char *str) = 0;
+    virtual bool char_available() = 0;
 
-    /**
-     * @brief Receive a byte.
-     *
-     * @param c Byte.
-     */
-    virtual void operator>>(uint8_t &c) = 0;
+    virtual char getc() = 0;
 
   private:
     /**

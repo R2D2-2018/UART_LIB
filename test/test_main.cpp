@@ -3,7 +3,7 @@
 #include "../src/mock_uart.hpp"
 
 TEST_CASE("Construct MockUART instance") {
-    MockUART uart(115200, UARTController::THREE, false);
+    UARTLib::MockUART uart(115200, UARTLib::UARTController::THREE, false);
 
     REQUIRE(!uart.isInitialized());
     REQUIRE(uart.available() == 0);

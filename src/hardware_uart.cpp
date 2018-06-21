@@ -195,4 +195,4 @@ inline void HardwareUART::disable() {
     hardwareUSART->US_CR = UART_CR_RSTRX | UART_CR_RSTTX | UART_CR_RXDIS | UART_CR_TXDIS;
 }
 
-}
+} // namespace UARTLib

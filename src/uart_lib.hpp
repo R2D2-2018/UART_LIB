@@ -8,7 +8,7 @@
 
 #endif
 
-#include "uart_connection.hpp"
 #include "mock_uart.hpp"
+#include "uart_connection.hpp"
 
 #endif

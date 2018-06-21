@@ -209,6 +209,6 @@ class HardwareUART : public UARTConnection {
     inline uint8_t receiveByte() override;
 };
 
-}
+} // namespace UARTLib
 
 #endif

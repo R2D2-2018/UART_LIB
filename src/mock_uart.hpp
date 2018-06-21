@@ -203,6 +203,6 @@ class MockUART : public UARTConnection {
     inline uint8_t receiveByte();
 };
 
-}
+} // namespace UARTLib
 
 #endif

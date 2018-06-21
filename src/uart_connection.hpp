@@ -117,10 +117,32 @@ class UARTConnection : public hwlib::ostream, public hwlib::istream {
      */
     virtual bool isInitialized() = 0;
 
+    /**
+     * @brief Write a character using UART.
+     *
+     * Used for interface inheriting between hwlib::istream and hwlib::ostream.
+     *
+     * @param c Character to send.
+     */
     virtual void putc(char c) = 0;
 
+    /**
+     * @brief Check if a character is available to read.
+     *
+     * Used for interface inheriting between hwlib::istream and hwlib::ostream.
+     *
+     * @return true
+     * @return false
+     */
     virtual bool char_available() = 0;
 
+    /**
+     * @brief Read a character using UART.
+     *
+     * Used for interface inheriting between hwlib::istream and hwlib::ostream.
+     *
+     * @return char
+     */
     virtual char getc() = 0;
 
   private:
@@ -147,6 +169,6 @@ class UARTConnection : public hwlib::ostream, public hwlib::istream {
     virtual inline uint8_t receiveByte() = 0;
 };
 
-}
+} // namespace UARTLib
 
 #endif
